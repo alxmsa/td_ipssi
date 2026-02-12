@@ -4,14 +4,45 @@
 {% block title %} {{ parent() }} | Liste des categories{% endblock %}
 
 {% block body %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
 
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn"> {{ button_label|default('Valider') }} </button>
-{{ form_end(form) }}
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h1 class="h4 mb-0">Créer une catégorie</h1>
+        {# optionnel: bouton retour si tu as une route liste #}
+        {# <a href="{{ path('app_category') }}" class="btn btn-outline-secondary btn-sm">Retour</a> #}
+      </div>
 
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+          {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+
+            {# Style global des inputs #}
+            {{ form_widget(form, {
+              'attr': {'class': 'form-control'}
+            }) }}
+
+            <div class="d-grid mt-3">
+              <button class="btn btn-primary">
+                <i class="bi bi-check2-circle me-1"></i>
+                {{ button_label|default('Valider') }}
+              </button>
+            </div>
+
+          {{ form_end(form) }}
+
+        </div>
+      </div>
+
+      <p class="text-muted small mt-3 mb-0">
+        Les champs requis doivent être complétés avant validation.
+      </p>
+
+    </div>
+  </div>
+</div>
 {% endblock %}
 
-
-{% block footer %}
-{% endblock %}
+{% block footer %}{% endblock %}
