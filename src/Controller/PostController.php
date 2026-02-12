@@ -1,8 +1,9 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Post;
-use App\Form\PostType;
+use App\Form\Post1Type;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,46 +12,70 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/post')]
-class PostController extends AbstractController
+final class PostController extends AbstractController
 {
-    #[Route('/', name: 'post_list')]
-    public function list(PostRepository $postRepository): Response
+    #[Route(name: 'app_post_index', methods: ['GET'])]
+    public function index(PostRepository $postRepository): Response
     {
-        $posts = $postRepository->findAllPosts();
-        return $this->render('post/list.html.twig', [
-            'controller_name' => 'PostController',
-            'posts' => $posts
+        return $this->render('post/index.html.twig', [
+            'posts' => $postRepository->findAll(),
         ]);
     }
 
-    #[Route('/new', name: 'post_new')]
-    public function new(
-       Request $request,
-       EntityManagerInterface $entityManager 
-    ): Response
+    #[Route('/new', name: 'app_post_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $post = new Post();
-        $form = $this->createForm(PostType::class, $post);
+        $form = $this->createForm(Post1Type::class, $post);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($post);
             $entityManager->flush();
+
+            return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
         }
+
         return $this->render('post/new.html.twig', [
-            'form' => $form->createView(),
+            'post' => $post,
+            'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'post_update')]
-    public function update(): Response
+    #[Route('/{id}', name: 'app_post_show', methods: ['GET'])]
+    public function show(Post $post): Response
     {
-        return $this->render('post/list.html.twig');
+        return $this->render('post/show.html.twig', [
+            'post' => $post,
+        ]);
     }
 
-    #[Route('/{id}', name: 'post_delete')]
-    public function delete(): Response
+    #[Route('/{id}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('post/list.html.twig');
+        $form = $this->createForm(Post1Type::class, $post);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('post/edit.html.twig', [
+            'post' => $post,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_post_delete', methods: ['POST'])]
+    public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($post);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
     }
 }

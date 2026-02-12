@@ -1,17 +1,11 @@
 {% extends 'base.html.twig' %}
-{% import 'macros.html.twig' as macros %}
 
-{% block title %} {{ parent() }} | Liste des categories{% endblock %}
+{% block title %}New Post{% endblock %}
 
 {% block body %}
+    <h1>Create new Post</h1>
 
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn"> {{ button_label|default('Sauvegarder') }} </button>
-{{ form_end(form) }}
+    {{ include('post/_form.html.twig') }}
 
-{% endblock %}
-
-
-{% block footer %}
+    <a href="{{ path('app_post_index') }}">back to list</a>
 {% endblock %}
