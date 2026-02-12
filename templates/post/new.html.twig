@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% import 'macros.html.twig' as macros %}
+
+{% block title %} {{ parent() }} | Liste des categories{% endblock %}
+
+{% block body %}
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn"> {{ button_label|default('Sauvegarder') }} </button>
+{{ form_end(form) }}
+
+{% endblock %}
+
+
+{% block footer %}
+{% endblock %}
