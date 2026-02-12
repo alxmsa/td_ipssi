@@ -10,7 +10,7 @@
     
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="{{ path('post_list') }}">Mon Blog</a>
+    <a class="navbar-brand" href="{{ path('app_post_index') }}">Mon Blog</a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
@@ -19,7 +19,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link" href="{{ path('post_list') }}">Articles</a>
+          <a class="nav-link" href="{{ path('app_post_index') }}">Articles</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_category') }}">Catégories</a>
@@ -28,7 +28,7 @@
         {# Lien admin seulement si admin #}
         {% if is_granted('ROLE_ADMIN') %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ path('post_new') }}">Créer un article</a>
+            <a class="nav-link" href="{{ path('app_post_new') }}">Créer un article</a>
           </li>
         {% endif %}
       </ul>
